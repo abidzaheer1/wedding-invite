@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Geist_Mono, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const displaySerif = Cormorant_Garamond({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+});
+
+const script = Great_Vibes({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const geistMono = Geist_Mono({
@@ -13,17 +20,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Julia & Luca | Rome",
-  description: "Join Julia and Luca as they begin a new chapter in Rome.",
+  title: "Julia & Luca · A wedding in Rome",
+  description:
+    "Julia & Luca are getting married in Rome on July 6, 2026. Scroll through their story and reply with joy.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${displaySerif.variable} ${script.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
