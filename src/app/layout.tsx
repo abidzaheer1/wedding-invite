@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist_Mono, Great_Vibes } from "next/font/google";
+import { Amiri, Cormorant_Garamond, Geist_Mono, Great_Vibes } from "next/font/google";
+import { wedding } from "@/data/wedding";
 import "./globals.css";
 
 const displaySerif = Cormorant_Garamond({
@@ -14,22 +15,27 @@ const script = Great_Vibes({
   weight: ["400"],
 });
 
+const arabic = Amiri({
+  variable: "--font-arabic",
+  subsets: ["arabic"],
+  weight: ["400"],
+});
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Julia & Luca · A wedding in Rome",
-  description:
-    "Julia & Luca are getting married in Rome on July 6, 2026. Scroll through their story and reply with joy.",
+  title: `${wedding.groom.name} & ${wedding.bride.name} · Nikah & Valima`,
+  description: `${wedding.groom.name} & ${wedding.bride.name} invite you to their Nikah on ${wedding.nikah.date} and Valima on ${wedding.valima.date} in ${wedding.city}. Scroll through the story and send your RSVP.`,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${displaySerif.variable} ${script.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${displaySerif.variable} ${script.variable} ${arabic.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>
