@@ -145,12 +145,15 @@ export function Mosque() {
         />
       ))}
 
-      <Chandelier position={[0, FLOOR + H + 1.6, -4]} drop={4.2} radius={2.4} bulbs={12} light={{ intensity: 140, distance: 34 }} />
+      <Chandelier position={[0, FLOOR + H + 1.6, -4]} drop={4.2} radius={2.4} bulbs={12} light={{ intensity: 60, distance: 34 }} />
 
       {/* The Nikah: imam, groom and bride before the mihrab */}
-      <mesh geometry={box} material={cushion} position={[-1.15, FLOOR + 0.07, -11]} scale={[1.2, 0.14, 1.1]} />
-      <mesh geometry={box} material={cushion} position={[1.15, FLOOR + 0.07, -11]} scale={[1.2, 0.14, 1.1]} />
-      <mesh geometry={box} material={materials.gold} position={[0, FLOOR + 0.05, -11]} scale={[4.6, 0.1, 2]} />
+      <mesh geometry={box} material={materials.stoneTrim} position={[0, FLOOR + 0.2, -11.6]} scale={[6, 0.4, 3.6]} />
+      <mesh geometry={box} material={materials.gold} position={[0, FLOOR + 0.41, -11.6]} scale={[6.1, 0.04, 3.7]} />
+      <mesh geometry={box} material={carpet} position={[0, FLOOR + 0.44, -11.6]} scale={[5.6, 0.04, 3.2]} />
+      <mesh geometry={box} material={cushion} position={[-1.15, FLOOR + 0.52, -11]} scale={[1.2, 0.14, 1.1]} />
+      <mesh geometry={box} material={cushion} position={[1.15, FLOOR + 0.52, -11]} scale={[1.2, 0.14, 1.1]} />
+      <pointLight position={[0, FLOOR + 4.5, -9.5]} intensity={18} distance={14} decay={1.6} color="#ffe2b8" />
       <Person
         outfit="sherwani"
         primary="#f3e9d6"
@@ -158,7 +161,7 @@ export function Mosque() {
         accent="#7a1f2b"
         headwear="safa"
         seated
-        position={[-1.15, FLOOR + 0.14, -11]}
+        position={[-1.15, FLOOR + 0.59, -11]}
         rotation={[0, 0.12, 0]}
       />
       <Person
@@ -167,7 +170,7 @@ export function Mosque() {
         headwear="dupatta"
         skin="#e0ac69"
         seated
-        position={[1.15, FLOOR + 0.14, -11]}
+        position={[1.15, FLOOR + 0.59, -11]}
         rotation={[0, -0.12, 0]}
       />
       <Person
@@ -179,7 +182,7 @@ export function Mosque() {
         skin="#c68642"
         seated
         book
-        position={[0, FLOOR + 0.04, -12.6]}
+        position={[0, FLOOR + 0.46, -12.6]}
       />
 
       {/* Congregation */}

@@ -150,7 +150,7 @@ export function SunAndMoon() {
       </mesh>
       <mesh ref={moon} position={[HALL_X + 260, 200, -560]}>
         <sphereGeometry args={[16, 24, 16]} />
-        <meshBasicMaterial color="#eef1ff" transparent fog={false} />
+        <meshBasicMaterial color="#fff4d6" transparent fog={false} />
       </mesh>
     </>
   );

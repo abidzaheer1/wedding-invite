@@ -12,12 +12,16 @@ export const HALL_X = 140;
  * React re-renders are needed to animate the world.
  */
 export const timeline = {
-  /** Scroll position mapped onto 0..PAGES-1 */
+  /** Raw scroll in viewport-heights, written by the page scroller. */
+  scroll: 0,
+  /** Smoothed scroll position mapped onto 0..PAGES-1 */
   t: 0,
   /** 0 = golden afternoon, 1 = deep night */
   night: 0,
   /** Seconds since the experience mounted */
   elapsed: 0,
+  pointerX: 0,
+  pointerY: 0,
 };
 
 export const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));

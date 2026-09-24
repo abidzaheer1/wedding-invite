@@ -38,9 +38,9 @@ function StageSpot() {
         position={[X, FLOOR + H - 0.4, -5]}
         angle={0.55}
         penumbra={0.7}
-        intensity={260}
+        intensity={55}
         distance={30}
-        decay={1.5}
+        decay={1.6}
         color="#ffe2b8"
       />
       <object3D ref={target} position={[X, FLOOR + 1.5, -12.5]} />
@@ -95,7 +95,9 @@ export function FunctionHall() {
           <mesh key={`${dx}${z}`} geometry={cylinder} material={materials.stoneTrim} position={[X + dx, FLOOR + 3.1, z]} scale={[0.32, 6.2, 0.32]} />
         ))
       )}
-      <pointLight position={[X, FLOOR + 5.6, 14]} intensity={70} distance={22} decay={1.6} color="#ffd39a" />
+      <pointLight position={[X, FLOOR + 5.6, 14]} intensity={40} distance={22} decay={1.6} color="#ffd39a" />
+      <pointLight position={[X - 12, FLOOR + 3, 13]} intensity={22} distance={18} decay={1.6} color="#ffc98a" />
+      <pointLight position={[X + 12, FLOOR + 3, 13]} intensity={22} distance={18} decay={1.6} color="#ffc98a" />
       <FairyString from={[X - 7, FLOOR + 6.15, 18.3]} to={[X + 7, FLOOR + 6.15, 18.3]} count={24} sag={0.35} />
       <FairyString from={[X - 7, FLOOR + 6.15, 9.9]} to={[X - 7, FLOOR + 6.15, 18.3]} count={16} sag={0.25} />
       <FairyString from={[X + 7, FLOOR + 6.15, 9.9]} to={[X + 7, FLOOR + 6.15, 18.3]} count={16} sag={0.25} />
@@ -128,7 +130,7 @@ export function FunctionHall() {
       {/* Groom in a dark brown suit, bride in red bridal lehenga */}
       <Person
         outfit="suit"
-        primary="#3b2314"
+        primary="#4a2c19"
         secondary="#f7f3ea"
         accent="#7a1f2b"
         skin="#c68642"
@@ -145,9 +147,9 @@ export function FunctionHall() {
       />
 
       {/* Lighting */}
-      <Chandelier position={[X, FLOOR + H, -2]} drop={1.4} radius={2.4} bulbs={14} light={{ intensity: 150, distance: 36 }} />
-      <Chandelier position={[X - 10, FLOOR + H, -6]} drop={1.2} radius={1.5} bulbs={10} light={{ intensity: 90, distance: 26 }} />
-      <Chandelier position={[X + 10, FLOOR + H, -6]} drop={1.2} radius={1.5} bulbs={10} light={{ intensity: 90, distance: 26 }} />
+      <Chandelier position={[X, FLOOR + H, -2]} drop={1.4} radius={2.4} bulbs={14} light={{ intensity: 55, distance: 34 }} />
+      <Chandelier position={[X - 10, FLOOR + H, -6]} drop={1.2} radius={1.5} bulbs={10} light={{ intensity: 32, distance: 24 }} />
+      <Chandelier position={[X + 10, FLOOR + H, -6]} drop={1.2} radius={1.5} bulbs={10} light={{ intensity: 32, distance: 24 }} />
       <Chandelier position={[X - 10, FLOOR + H, 4]} drop={1.2} radius={1.5} bulbs={10} />
       <Chandelier position={[X + 10, FLOOR + H, 4]} drop={1.2} radius={1.5} bulbs={10} />
       <StageSpot />

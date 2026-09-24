@@ -94,6 +94,17 @@ const CLOUDS: CloudSpec[] = [
   { pos: [110, 74, -170], scale: 4.4, seed: 15 },
   { pos: [-10, 78, -200], scale: 4.8, seed: 16 },
   { pos: [40, 66, -140], scale: 3.4, seed: 17 },
+  // Low deck beneath the opening shot so the ground reads as distant haze
+  { pos: [-30, 44, 30], scale: 2.6, seed: 21 },
+  { pos: [28, 42, 34], scale: 2.4, seed: 22 },
+  { pos: [-2, 40, 8], scale: 3.0, seed: 23 },
+  { pos: [-60, 46, -10], scale: 3.2, seed: 24 },
+  { pos: [62, 45, -6], scale: 3.0, seed: 25 },
+  { pos: [-20, 43, -40], scale: 3.4, seed: 26 },
+  { pos: [26, 41, -45], scale: 3.2, seed: 27 },
+  { pos: [-90, 48, 20], scale: 3.6, seed: 28 },
+  { pos: [92, 47, 24], scale: 3.4, seed: 29 },
+  { pos: [12, 37, 22], scale: 2.6, seed: 30 },
   // A few over the hall so its night sky is not empty
   { pos: [HALL_X - 60, 66, -120], scale: 3.4, seed: 18 },
   { pos: [HALL_X + 50, 70, -150], scale: 3.8, seed: 19 },

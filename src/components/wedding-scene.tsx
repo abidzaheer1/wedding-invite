@@ -1,9 +1,9 @@
 "use client";
 
-import { AdaptiveDpr, Scroll, ScrollControls, useScroll } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { AdaptiveDpr } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { wedding } from "@/data/wedding";
 import { RsvpForm } from "./rsvp-form";
 import { GradientSky, Ground, Lighting, Stars, SunAndMoon } from "./scene/atmosphere";
@@ -11,7 +11,7 @@ import { CameraRig } from "./scene/camera-rig";
 import { FunctionHall } from "./scene/hall";
 import { Mosque } from "./scene/mosque";
 import { Clouds, Greenery } from "./scene/nature";
-import { PAGES } from "./scene/timeline";
+import { clamp, timeline } from "./scene/timeline";
 
 function World() {
   return (
@@ -71,26 +71,32 @@ function EventCard({
   );
 }
 
-function Overlay() {
-  const scroll = useScroll();
+/** Fades each chapter in as the native scroller reaches it. */
+function Story() {
   const story = useRef<HTMLDivElement>(null);
 
-  // Fade and slide each page's copy in as its scene approaches.
-  useFrame(() => {
-    const sections = story.current?.children;
-    if (!sections) return;
-    const span = 1 / (PAGES - 1);
-    for (let i = 0; i < sections.length; i++) {
-      const el = sections[i] as HTMLElement;
-      const v = Math.min(1, scroll.curve((i - 0.75) * span, span * 1.5) * 1.9);
-      el.style.opacity = v.toFixed(3);
-      el.style.setProperty("--reveal", v.toFixed(3));
-    }
-  });
+  useEffect(() => {
+    let frame = 0;
+    const tick = () => {
+      const sections = story.current?.children;
+      if (sections) {
+        const t = timeline.scroll;
+        const last = sections.length - 1;
+        for (let i = 0; i < sections.length; i++) {
+          const v = i === last ? clamp((t - (i - 0.85)) / 0.85) : clamp(1 - Math.abs(t - i) / 0.6);
+          const el = sections[i] as HTMLElement;
+          el.style.opacity = v.toFixed(3);
+          el.style.setProperty("--reveal", v.toFixed(3));
+        }
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   return (
-    <Scroll html>
-      <div ref={story} className="story">
+    <div ref={story} className="story">
         <section className="panel panel--hero">
           <p className="bismillah emerge" style={{ animationDelay: "0.4s" }}>
             بِسْمِ ٱللَّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
@@ -165,8 +171,7 @@ function Overlay() {
             <span>{wedding.city}</span>
           </div>
         </section>
-      </div>
-    </Scroll>
+    </div>
   );
 }
 
@@ -177,12 +182,24 @@ export function WeddingScene() {
         camera={{ position: [0, 58, 40], fov: 42, near: 0.5, far: 2200 }}
         dpr={[1, 1.75]}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+        style={{ pointerEvents: "none" }}
       >
-        <ScrollControls pages={PAGES} damping={0.3}>
-          <World />
-          <Overlay />
-        </ScrollControls>
+        <World />
       </Canvas>
+      <div
+        className="scroller"
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          timeline.scroll = el.clientHeight ? el.scrollTop / el.clientHeight : 0;
+        }}
+        onPointerMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          timeline.pointerX = ((e.clientX - r.left) / r.width) * 2 - 1;
+          timeline.pointerY = -((e.clientY - r.top) / r.height) * 2 + 1;
+        }}
+      >
+        <Story />
+      </div>
     </div>
   );
 }

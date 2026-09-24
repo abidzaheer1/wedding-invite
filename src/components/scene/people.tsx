@@ -22,6 +22,9 @@ const box = new BoxGeometry(1, 1, 1);
 const torso = new CapsuleGeometry(1, 1, 4, 12);
 const cone = new ConeGeometry(1, 1, 24);
 const torus = new TorusGeometry(1, 0.12, 8, 24);
+// Head coverings: spheres left open at the front so the face shows.
+const hairShell = new SphereGeometry(1, 20, 14, 0.9, Math.PI * 2 - 1.8, 0, Math.PI * 0.62);
+const dupattaShell = new SphereGeometry(1, 24, 16, 0.75, Math.PI * 2 - 1.5, 0, Math.PI * 0.72);
 const goldMaterial = new MeshStandardMaterial({ color: GOLD, metalness: 0.85, roughness: 0.3 });
 
 const materialCache = new Map<string, MeshStandardMaterial>();
@@ -85,8 +88,11 @@ export function Person({
   const accentMat = mat(accent);
   const hairMat = mat(hair, { roughness: 0.9 });
 
-  const headY = seated ? 1.16 : 1.62;
-  const torsoY = seated ? 0.72 : 1.2;
+  // Standing: legs 0–0.86, torso 0.8–1.46, head centred at 1.7 (≈1.9 tall).
+  // Seated: folded legs 0–0.24, torso 0.3–0.9, head centred at 1.12.
+  const headY = seated ? 1.12 : 1.7;
+  const torsoY = seated ? 0.6 : 1.13;
+  const shoulderY = seated ? 0.82 : 1.36;
   const isLehenga = outfit === "lehenga";
   const longCoat = outfit === "sherwani" || outfit === "kurta";
 
@@ -95,9 +101,9 @@ export function Person({
       {/* Legs / seat */}
       {seated ? (
         isLehenga ? (
-          <mesh geometry={cone} material={primaryMat} position={[0, 0.26, 0.05]} scale={[0.82, 0.52, 0.72]} />
+          <mesh geometry={cone} material={primaryMat} position={[0, 0.24, 0.05]} scale={[0.8, 0.48, 0.7]} />
         ) : (
-          <mesh geometry={box} material={primaryMat} position={[0, 0.15, 0.08]} scale={[0.74, 0.3, 0.66]} />
+          <mesh geometry={box} material={primaryMat} position={[0, 0.13, 0.08]} scale={[0.76, 0.26, 0.64]} />
         )
       ) : isLehenga ? (
         <>
@@ -106,110 +112,100 @@ export function Person({
         </>
       ) : (
         <>
-          <mesh geometry={cylinder} material={longCoat ? secondaryMat : primaryMat} position={[-0.12, 0.42, 0]} scale={[0.1, 0.84, 0.1]} />
-          <mesh geometry={cylinder} material={longCoat ? secondaryMat : primaryMat} position={[0.12, 0.42, 0]} scale={[0.1, 0.84, 0.1]} />
+          <mesh geometry={cylinder} material={longCoat ? secondaryMat : primaryMat} position={[-0.12, 0.43, 0]} scale={[0.1, 0.86, 0.1]} />
+          <mesh geometry={cylinder} material={longCoat ? secondaryMat : primaryMat} position={[0.12, 0.43, 0]} scale={[0.1, 0.86, 0.1]} />
           <mesh geometry={box} material={mat("#2a1a12")} position={[-0.12, 0.05, 0.05]} scale={[0.14, 0.1, 0.3]} />
           <mesh geometry={box} material={mat("#2a1a12")} position={[0.12, 0.05, 0.05]} scale={[0.14, 0.1, 0.3]} />
         </>
       )}
 
-      {/* Torso */}
+      {/* Torso (sherwani / kurta hang to the knee when standing) */}
       <mesh
         geometry={torso}
         material={primaryMat}
-        position={[0, longCoat && !seated ? torsoY - 0.18 : torsoY, 0]}
-        scale={longCoat && !seated ? [0.26, 0.42, 0.22] : [0.25, 0.26, 0.2]}
+        position={[0, longCoat && !seated ? torsoY - 0.16 : torsoY, 0]}
+        scale={longCoat && !seated ? [0.25, 0.36, 0.2] : [0.24, 0.22, 0.19]}
       />
 
       {/* Suit shirt + tie / sherwani buttons / bridal necklace */}
       {outfit === "suit" && (
         <>
-          <mesh geometry={box} material={secondaryMat} position={[0, torsoY + 0.1, 0.19]} scale={[0.16, 0.34, 0.06]} />
-          <mesh geometry={box} material={accentMat} position={[0, torsoY + 0.06, 0.225]} scale={[0.06, 0.3, 0.02]} />
-          <mesh geometry={box} material={accentMat} position={[-0.15, torsoY + 0.18, 0.2]} scale={[0.08, 0.03, 0.02]} />
+          <mesh geometry={box} material={secondaryMat} position={[0, torsoY + 0.14, 0.17]} scale={[0.15, 0.3, 0.06]} />
+          <mesh geometry={box} material={accentMat} position={[0, torsoY + 0.1, 0.205]} scale={[0.055, 0.28, 0.02]} />
+          <mesh geometry={box} material={accentMat} position={[-0.14, torsoY + 0.2, 0.185]} scale={[0.07, 0.03, 0.02]} />
         </>
       )}
       {outfit === "sherwani" &&
         [0, 1, 2, 3].map((i) => (
-          <mesh
-            key={i}
-            geometry={sphere}
-            material={goldMaterial}
-            position={[0, torsoY + 0.22 - i * 0.13, 0.24]}
-            scale={0.025}
-          />
+          <mesh key={i} geometry={sphere} material={goldMaterial} position={[0, torsoY + 0.2 - i * 0.12, 0.22]} scale={0.024} />
         ))}
       {isLehenga && (
         <>
-          <mesh geometry={torus} material={goldMaterial} position={[0, torsoY + 0.24, 0.12]} rotation={[0.5, 0, 0]} scale={[0.17, 0.17, 0.5]} />
-          <mesh geometry={box} material={goldMaterial} position={[0, torsoY, 0.2]} scale={[0.34, 0.06, 0.03]} />
+          <mesh geometry={torus} material={goldMaterial} position={[0, torsoY + 0.2, 0.1]} rotation={[0.55, 0, 0]} scale={[0.15, 0.15, 0.5]} />
+          <mesh geometry={box} material={goldMaterial} position={[0, torsoY - 0.02, 0.18]} scale={[0.3, 0.05, 0.03]} />
         </>
       )}
 
       {/* Arms */}
       {seated ? (
         <>
-          <mesh geometry={cylinder} material={primaryMat} position={[-0.3, 0.6, 0.18]} rotation={[0.9, 0, 0.25]} scale={[0.075, 0.5, 0.075]} />
-          <mesh geometry={cylinder} material={primaryMat} position={[0.3, 0.6, 0.18]} rotation={[0.9, 0, -0.25]} scale={[0.075, 0.5, 0.075]} />
-          <mesh geometry={sphere} material={skinMat} position={[-0.26, 0.4, 0.38]} scale={0.075} />
-          <mesh geometry={sphere} material={skinMat} position={[0.26, 0.4, 0.38]} scale={0.075} />
+          <mesh geometry={cylinder} material={primaryMat} position={[-0.29, 0.56, 0.16]} rotation={[0.9, 0, 0.25]} scale={[0.07, 0.48, 0.07]} />
+          <mesh geometry={cylinder} material={primaryMat} position={[0.29, 0.56, 0.16]} rotation={[0.9, 0, -0.25]} scale={[0.07, 0.48, 0.07]} />
+          <mesh geometry={sphere} material={skinMat} position={[-0.25, 0.37, 0.36]} scale={0.07} />
+          <mesh geometry={sphere} material={skinMat} position={[0.25, 0.37, 0.36]} scale={0.07} />
         </>
       ) : (
         <>
-          <mesh geometry={cylinder} material={primaryMat} position={[-0.33, torsoY - 0.08, 0]} rotation={[0, 0, 0.14]} scale={[0.075, 0.62, 0.075]} />
-          <mesh geometry={cylinder} material={primaryMat} position={[0.33, torsoY - 0.08, 0]} rotation={[0, 0, -0.14]} scale={[0.075, 0.62, 0.075]} />
-          <mesh geometry={sphere} material={skinMat} position={[-0.37, torsoY - 0.42, 0]} scale={0.075} />
-          <mesh geometry={sphere} material={skinMat} position={[0.37, torsoY - 0.42, 0]} scale={0.075} />
+          <mesh geometry={cylinder} material={primaryMat} position={[-0.32, shoulderY - 0.3, 0]} rotation={[0, 0, 0.12]} scale={[0.07, 0.6, 0.07]} />
+          <mesh geometry={cylinder} material={primaryMat} position={[0.32, shoulderY - 0.3, 0]} rotation={[0, 0, -0.12]} scale={[0.07, 0.6, 0.07]} />
+          <mesh geometry={sphere} material={skinMat} position={[-0.36, shoulderY - 0.63, 0]} scale={0.07} />
+          <mesh geometry={sphere} material={skinMat} position={[0.36, shoulderY - 0.63, 0]} scale={0.07} />
           {isLehenga && (
             <>
-              <mesh geometry={torus} material={goldMaterial} position={[-0.37, torsoY - 0.34, 0]} scale={[0.09, 0.09, 0.4]} />
-              <mesh geometry={torus} material={goldMaterial} position={[0.37, torsoY - 0.34, 0]} scale={[0.09, 0.09, 0.4]} />
+              <mesh geometry={torus} material={goldMaterial} position={[-0.35, shoulderY - 0.55, 0]} scale={[0.085, 0.085, 0.4]} />
+              <mesh geometry={torus} material={goldMaterial} position={[0.35, shoulderY - 0.55, 0]} scale={[0.085, 0.085, 0.4]} />
             </>
           )}
         </>
       )}
 
       {book && (
-        <mesh geometry={box} material={mat("#2f6b4f")} position={[0, 0.46, 0.36]} rotation={[-0.5, 0, 0]} scale={[0.3, 0.04, 0.22]} />
+        <mesh geometry={box} material={mat("#2f6b4f")} position={[0, 0.44, 0.34]} rotation={[-0.5, 0, 0]} scale={[0.3, 0.04, 0.22]} />
       )}
 
       {/* Neck + head */}
-      <mesh geometry={cylinder} material={skinMat} position={[0, headY - 0.22, 0]} scale={[0.07, 0.12, 0.07]} />
-      <mesh geometry={sphere} material={skinMat} position={[0, headY, 0]} scale={0.19} />
+      <mesh geometry={cylinder} material={skinMat} position={[0, headY - 0.2, 0]} scale={[0.065, 0.14, 0.065]} />
+      <mesh geometry={sphere} material={skinMat} position={[0, headY, 0]} scale={0.18} />
 
-      {/* Hair (left open at the front for the face) */}
       {headwear !== "dupatta" && (
-        <mesh position={[0, headY + 0.02, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={0.205} material={hairMat}>
-          <sphereGeometry args={[1, 20, 14, 0.9, Math.PI * 2 - 1.8, 0, Math.PI * 0.62]} />
-        </mesh>
+        <mesh geometry={hairShell} material={hairMat} position={[0, headY + 0.02, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={0.195} />
       )}
       {beard && (
-        <mesh geometry={sphere} material={mat(beard, { roughness: 0.95 })} position={[0, headY - 0.13, 0.08]} scale={[0.14, 0.11, 0.12]} />
+        <mesh geometry={sphere} material={mat(beard, { roughness: 0.95 })} position={[0, headY - 0.12, 0.08]} scale={[0.13, 0.11, 0.11]} />
       )}
 
       {/* Headwear */}
       {headwear === "cap" && (
         <>
-          <mesh geometry={cylinder} material={secondaryMat} position={[0, headY + 0.16, 0]} scale={[0.185, 0.11, 0.185]} />
-          <mesh geometry={torus} material={goldMaterial} position={[0, headY + 0.12, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.185, 0.185, 0.12]} />
+          <mesh geometry={cylinder} material={secondaryMat} position={[0, headY + 0.15, 0]} scale={[0.175, 0.1, 0.175]} />
+          <mesh geometry={torus} material={goldMaterial} position={[0, headY + 0.11, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.175, 0.175, 0.12]} />
         </>
       )}
       {headwear === "safa" && (
         <>
-          <mesh geometry={sphere} material={accentMat} position={[0, headY + 0.13, -0.01]} scale={[0.25, 0.17, 0.25]} />
-          <mesh geometry={torus} material={goldMaterial} position={[0, headY + 0.08, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.22, 0.22, 0.25]} />
-          <mesh geometry={sphere} material={goldMaterial} position={[0.06, headY + 0.24, 0.16]} scale={[0.035, 0.09, 0.03]} />
+          <mesh geometry={sphere} material={accentMat} position={[0, headY + 0.12, -0.01]} scale={[0.24, 0.16, 0.24]} />
+          <mesh geometry={torus} material={goldMaterial} position={[0, headY + 0.07, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.21, 0.21, 0.25]} />
+          <mesh geometry={sphere} material={goldMaterial} position={[0.06, headY + 0.23, 0.15]} scale={[0.035, 0.09, 0.03]} />
           <mesh geometry={box} material={accentMat} position={[0.2, headY - 0.3, -0.16]} rotation={[0.1, 0, -0.15]} scale={[0.12, 0.7, 0.04]} />
         </>
       )}
       {headwear === "dupatta" && (
         <>
-          <mesh position={[0, headY + 0.03, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={[0.255, 0.27, 0.255]} material={primaryMat}>
-            <sphereGeometry args={[1, 24, 16, 0.75, Math.PI * 2 - 1.5, 0, Math.PI * 0.72]} />
-          </mesh>
-          <mesh geometry={torus} material={goldMaterial} position={[0, headY + 0.12, 0.17]} rotation={[1.2, 0, 0]} scale={[0.2, 0.2, 0.25]} />
-          <mesh geometry={box} material={primaryMat} position={[0, headY - 0.45, -0.23]} rotation={[0.12, 0, 0]} scale={[0.62, seated ? 0.7 : 0.95, 0.05]} />
-          <mesh geometry={sphere} material={goldMaterial} position={[0, headY + 0.05, 0.19]} scale={0.03} />
+          <mesh geometry={dupattaShell} material={primaryMat} position={[0, headY + 0.03, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={[0.24, 0.26, 0.24]} />
+          <mesh geometry={box} material={primaryMat} position={[0, headY - 0.45, -0.22]} rotation={[0.12, 0, 0]} scale={[0.6, seated ? 0.7 : 0.95, 0.05]} />
+          {/* maang tikka + a fine gold edge on the dupatta */}
+          <mesh geometry={sphere} material={goldMaterial} position={[0, headY + 0.08, 0.17]} scale={0.028} />
+          <mesh geometry={cylinder} material={goldMaterial} position={[0, headY + 0.13, 0.165]} rotation={[0, 0, Math.PI / 2]} scale={[0.008, 0.16, 0.008]} />
         </>
       )}
     </group>
@@ -221,10 +217,12 @@ export type GuestStyle = "mosque-men" | "mosque-women" | "hall";
 const MOSQUE_MEN = ["#f4efe4", "#e8e2d3", "#d8dde6", "#cfd8e8", "#efe6d0"];
 const MOSQUE_WOMEN = ["#2e7d7a", "#c48a1d", "#7a8a3a", "#8b4a6b", "#2f4a7a", "#a63d3d", "#5f8a6a"];
 const HALL_GUESTS = ["#1f2a44", "#3b3b3b", "#4a2a20", "#0f6b5c", "#7a1f4d", "#b8860b", "#1d4e89", "#8a1c2b", "#5b3a7a"];
+const capMaterial = new MeshStandardMaterial({ color: "#f7f3ea", roughness: 0.7 });
+const darkHair = new MeshStandardMaterial({ color: "#1a1210", roughness: 0.9 });
 
 /**
- * Cheap three-mesh figure for crowds. Origin at the floor (or seat) and faces
- * +Z. Deterministic per `seed` so the crowd is stable between renders.
+ * Cheap figure for crowds. Origin at the floor (or the seat when `seated`) and
+ * faces +Z. Deterministic per `seed` so the crowd is stable between renders.
  */
 export function Guest({
   seed,
@@ -241,26 +239,34 @@ export function Guest({
   }, [seed, style]);
 
   const bodyMat = mat(look.color);
-  const headY = seated ? 0.86 : 1.55;
+  const headY = seated ? 0.98 : 1.68;
 
   return (
     <group {...props} rotation={[0, look.lean, 0]}>
       {seated ? (
-        <mesh geometry={torso} material={bodyMat} position={[0, 0.42, 0]} scale={[0.27, 0.32, 0.24]} />
+        <>
+          <mesh geometry={box} material={bodyMat} position={[0, 0.11, 0.06]} scale={[0.62, 0.22, 0.5]} />
+          <mesh geometry={torso} material={bodyMat} position={[0, 0.5, 0]} scale={[0.25, 0.2, 0.21]} />
+        </>
       ) : (
-        <mesh geometry={torso} material={bodyMat} position={[0, 0.85, 0]} scale={[0.25, 0.55, 0.22]} />
+        <>
+          <mesh geometry={cylinder} material={bodyMat} position={[-0.11, 0.42, 0]} scale={[0.1, 0.84, 0.1]} />
+          <mesh geometry={cylinder} material={bodyMat} position={[0.11, 0.42, 0]} scale={[0.1, 0.84, 0.1]} />
+          <mesh geometry={torso} material={bodyMat} position={[0, 1.12, 0]} scale={[0.24, 0.22, 0.19]} />
+          <mesh geometry={cylinder} material={bodyMat} position={[-0.31, 1.05, 0]} rotation={[0, 0, 0.12]} scale={[0.065, 0.58, 0.065]} />
+          <mesh geometry={cylinder} material={bodyMat} position={[0.31, 1.05, 0]} rotation={[0, 0, -0.12]} scale={[0.065, 0.58, 0.065]} />
+        </>
       )}
-      <mesh geometry={sphere} material={mat(look.skin)} position={[0, headY, 0]} scale={0.175} />
+      <mesh geometry={sphere} material={mat(look.skin)} position={[0, headY, 0]} scale={0.17} />
       {look.woman ? (
-        <mesh position={[0, headY + 0.03, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={[0.225, 0.24, 0.225]} material={bodyMat}>
-          <sphereGeometry args={[1, 14, 10, 0.75, Math.PI * 2 - 1.5, 0, Math.PI * 0.72]} />
-        </mesh>
+        <mesh geometry={dupattaShell} material={bodyMat} position={[0, headY + 0.03, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={[0.22, 0.235, 0.22]} />
       ) : style === "hall" ? (
-        <mesh position={[0, headY + 0.02, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={0.19} material={mat("#1a1210", { roughness: 0.9 })}>
-          <sphereGeometry args={[1, 14, 10, 0.9, Math.PI * 2 - 1.8, 0, Math.PI * 0.6]} />
-        </mesh>
+        <mesh geometry={hairShell} material={darkHair} position={[0, headY + 0.02, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={0.185} />
       ) : (
-        <mesh geometry={cylinder} material={mat("#f7f3ea")} position={[0, headY + 0.15, 0]} scale={[0.17, 0.1, 0.17]} />
+        <>
+          <mesh geometry={hairShell} material={darkHair} position={[0, headY + 0.02, -0.02]} rotation={[0, Math.PI / 2, 0]} scale={0.185} />
+          <mesh geometry={cylinder} material={capMaterial} position={[0, headY + 0.14, 0]} scale={[0.165, 0.1, 0.165]} />
+        </>
       )}
     </group>
   );
