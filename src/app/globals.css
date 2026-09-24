@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root { --ink: #f4ead9; --muted: #b7c0bf; --gold: #d7a86e; --night: #101c24; }
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; background: var(--night); color: var(--ink); font-family: Georgia, "Times New Roman", serif; }
+button { font: inherit; }
+.invite-shell { position: relative; min-height: 100svh; overflow: hidden; background: radial-gradient(circle at 75% 45%, #243b43 0, var(--night) 43%, #0b151c 100%); }
+.scene-shell { position: absolute; inset: 0; opacity: .96; }
+.scene-shell::after { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(90deg, rgba(12, 23, 29, .88) 0%, rgba(12, 23, 29, .36) 48%, rgba(12, 23, 29, .14) 100%); }
+.topbar, .footer-note { position: absolute; z-index: 2; left: 6vw; right: 6vw; display: flex; align-items: center; justify-content: space-between; }
+.topbar { top: 38px; }
+.monogram { font-size: 1.1rem; letter-spacing: .13em; }
+.monogram i { color: var(--gold); font-size: .8em; font-style: italic; }
+.nav-date, .eyebrow, .footer-note { font-family: var(--font-geist-mono), monospace; font-size: .67rem; letter-spacing: .2em; text-transform: uppercase; }
+.nav-date { color: var(--muted); }
+.invite-content { position: relative; z-index: 1; display: flex; min-height: 100svh; width: min(620px, 86vw); flex-direction: column; justify-content: center; padding: 9rem 0 8rem 6vw; }
+.eyebrow { margin: 0 0 1.4rem; color: var(--gold); }
+h1 { max-width: 700px; margin: 0; font-size: clamp(4.2rem, 10vw, 8.8rem); font-weight: 400; letter-spacing: -.065em; line-height: .86; }
+h1 span { color: var(--gold); font-style: italic; }
+.intro { max-width: 335px; margin: 2rem 0 2.3rem; color: var(--muted); font-size: 1.05rem; line-height: 1.55; }
+.rsvp-button { display: flex; width: fit-content; align-items: center; gap: 2.5rem; border: 1px solid rgba(215, 168, 110, .75); border-radius: 999px; background: rgba(215, 168, 110, .08); color: var(--ink); cursor: pointer; padding: .9rem 1rem .9rem 1.35rem; font-family: var(--font-geist-mono), monospace; font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; transition: background .25s, color .25s; }
+.rsvp-button span { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: var(--gold); color: var(--night); font-size: 1rem; }
+.rsvp-button:hover, .rsvp-button.confirmed { background: var(--gold); color: var(--night); }
+.footer-note { bottom: 36px; color: var(--muted); }
+.footer-line { height: 1px; flex: 1; margin: 0 22px; background: rgba(183, 192, 191, .35); }
+@media (max-width: 700px) { .topbar { top: 24px; } .nav-date { display: none; } .invite-content { justify-content: flex-end; padding-bottom: 9rem; } .scene-shell { opacity: .72; } .scene-shell::after { background: linear-gradient(180deg, rgba(12, 23, 29, .5), rgba(12, 23, 29, .26) 40%, rgba(12, 23, 29, .9) 90%); } h1 { font-size: clamp(4rem, 20vw, 7rem); } .footer-note { bottom: 24px; font-size: .58rem; } .footer-line { margin: 0 12px; } }
